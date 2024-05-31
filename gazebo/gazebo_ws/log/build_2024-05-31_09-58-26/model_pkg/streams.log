@@ -1,0 +1,34 @@
+[0.021s] Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/govind/abhiyaan/gazebo_ws/build/model_pkg -- -j16 -l16
+[0.106s] Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/govind/abhiyaan/gazebo_ws/build/model_pkg -- -j16 -l16
+[0.179s] Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/govind/abhiyaan/gazebo_ws/build/model_pkg
+[0.194s] -- Install configuration: ""
+[0.194s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/launch
+[0.194s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/launch/model_launch.py
+[0.194s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/launch/display.launch.py
+[0.194s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/world.world
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/world_simple.world
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/world_igvc.world
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/world_bak.world
+[0.195s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/robot.xacro
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config
+[0.195s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/ekf.yaml
+[0.195s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/mapper_params_online_async.yaml
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/nav2_params.yaml
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/twist_mux.yaml
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/package_run_dependencies/model_pkg
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/parent_prefix_path/model_pkg
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/ament_prefix_path.sh
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/ament_prefix_path.dsv
+[0.196s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/path.sh
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/path.dsv
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.bash
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.sh
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.zsh
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.dsv
+[0.197s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/package.dsv
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/packages/model_pkg
+[0.197s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/cmake/model_pkgConfig.cmake
+[0.198s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/cmake/model_pkgConfig-version.cmake
+[0.198s] -- Up-to-date: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/package.xml
+[0.201s] Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/govind/abhiyaan/gazebo_ws/build/model_pkg

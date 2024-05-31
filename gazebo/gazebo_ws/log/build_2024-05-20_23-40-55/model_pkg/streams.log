@@ -1,0 +1,51 @@
+[0.015s] Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake /home/govind/abhiyaan/gazebo_ws/src/model_pkg -DCMAKE_INSTALL_PREFIX=/home/govind/abhiyaan/gazebo_ws/install/model_pkg
+[0.177s] -- The C compiler identification is GNU 11.4.0
+[0.304s] -- The CXX compiler identification is GNU 11.4.0
+[0.326s] -- Detecting C compiler ABI info
+[0.490s] -- Detecting C compiler ABI info - done
+[0.509s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.510s] -- Detecting C compile features
+[0.511s] -- Detecting C compile features - done
+[0.520s] -- Detecting CXX compiler ABI info
+[0.725s] -- Detecting CXX compiler ABI info - done
+[0.749s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.749s] -- Detecting CXX compile features
+[0.749s] -- Detecting CXX compile features - done
+[0.756s] -- Found ament_cmake: 1.3.8 (/opt/ros/humble/share/ament_cmake/cmake)
+[1.009s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.175s] -- Found ament_lint_auto: 0.12.10 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.303s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.304s] -- Added test 'lint_cmake' to check CMake code style
+[1.305s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.307s] -- Added test 'xmllint' to check XML markup files
+[1.309s] -- Configuring done
+[1.313s] -- Generating done
+[1.314s] -- Build files have been written to: /home/govind/abhiyaan/gazebo_ws/build/model_pkg
+[1.320s] Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake /home/govind/abhiyaan/gazebo_ws/src/model_pkg -DCMAKE_INSTALL_PREFIX=/home/govind/abhiyaan/gazebo_ws/install/model_pkg
+[1.322s] Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake --build /home/govind/abhiyaan/gazebo_ws/build/model_pkg -- -j8 -l8
+[1.434s] Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake --build /home/govind/abhiyaan/gazebo_ws/build/model_pkg -- -j8 -l8
+[1.528s] Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake --install /home/govind/abhiyaan/gazebo_ws/build/model_pkg
+[1.551s] -- Install configuration: ""
+[1.552s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/launch
+[1.552s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/launch/model_launch.py
+[1.553s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model
+[1.553s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/model/robot.xacro
+[1.554s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config
+[1.554s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/ekf.yaml
+[1.555s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/config/mapper_params_online_async.yaml
+[1.556s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/package_run_dependencies/model_pkg
+[1.557s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/parent_prefix_path/model_pkg
+[1.558s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/ament_prefix_path.sh
+[1.558s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/ament_prefix_path.dsv
+[1.559s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/path.sh
+[1.560s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/environment/path.dsv
+[1.560s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.bash
+[1.561s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.sh
+[1.563s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.zsh
+[1.563s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/local_setup.dsv
+[1.564s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/package.dsv
+[1.565s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/ament_index/resource_index/packages/model_pkg
+[1.566s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/cmake/model_pkgConfig.cmake
+[1.566s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/cmake/model_pkgConfig-version.cmake
+[1.567s] -- Installing: /home/govind/abhiyaan/gazebo_ws/install/model_pkg/share/model_pkg/package.xml
+[1.572s] Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/govind/abhiyaan/yoogi/autobot-master/install/basic_robot:/opt/ros/humble /usr/bin/cmake --install /home/govind/abhiyaan/gazebo_ws/build/model_pkg

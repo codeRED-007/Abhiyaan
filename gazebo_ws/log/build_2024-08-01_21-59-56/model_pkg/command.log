@@ -1,0 +1,2 @@
+Invoking command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg': /usr/bin/cmake /home/govind/abhiyaan/gazebo_ws/src/model_pkg -DCMAKE_INSTALL_PREFIX=/home/govind/abhiyaan/gazebo_ws/install/model_pkg
+Invoked command in '/home/govind/abhiyaan/gazebo_ws/build/model_pkg' returned '1': /usr/bin/cmake /home/govind/abhiyaan/gazebo_ws/src/model_pkg -DCMAKE_INSTALL_PREFIX=/home/govind/abhiyaan/gazebo_ws/install/model_pkg

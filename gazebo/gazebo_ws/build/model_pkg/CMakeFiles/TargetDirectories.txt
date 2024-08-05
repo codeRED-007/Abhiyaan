@@ -1,9 +1,0 @@
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/uninstall.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/model_pkg_uninstall.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/test.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/edit_cache.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/rebuild_cache.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/list_install_components.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/install.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/install/local.dir
-/home/govind/abhiyaan/gazebo_ws/build/model_pkg/CMakeFiles/install/strip.dir

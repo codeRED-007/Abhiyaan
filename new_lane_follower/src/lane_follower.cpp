@@ -102,8 +102,15 @@ private:
         
         std::vector<cv::Point> white_pixel_indices;
 
-        cv::findNonZero(thresholded_image, white_pixel_indices);
+        // cv::findNonZero(thresholded_image, white_pixel_indices);
+
         
+
+        
+
+        
+
+
 
         // ////cout<<"COLLECTING WHITE POINTS ENDED"<<endl;
 
@@ -160,6 +167,9 @@ private:
             
         }
 
+        // Filter white_pixel_indices to keep only one coordinate for each unique y value
+        
+
         // ////cout<<"DBSCAN STARTING"<<endl;
         // mlpack::dbscan::DBSCAN<> dbscan(epsilon, minPoints);
         // dbscan.Cluster(data, assignments);
@@ -205,16 +215,34 @@ private:
             return;
         }
         
-        vector<cv::Point> largestCluster, secondLargestCluster;
+        vector<cv::Point> largestCluster, secondLargestCluster, filtered_largestCluster, filtered_secondLargestCluster;
         ////cout<<"test"<<endl;
         for (size_t i = 0; i<assignments.n_elem ; ++i) {
             if (assignments[i] == largestClusterID) largestCluster.push_back(white_pixel_indices[i]);
             else if (assignments[i] == SecondLargestClusterID) secondLargestCluster.push_back(white_pixel_indices[i]);
         }
         
+        // std::unordered_map<int, int> y_to_x_map;
+
+        // for (const auto& point : largestCluster) {
+        //     if (y_to_x_map.find(point.y) == y_to_x_map.end()) {
+        //         y_to_x_map[point.y] = point.x;
+        //         filtered_largestCluster.push_back(point);
+        //     }
+        // }
         
+        // y_to_x_map.clear();
         
+        // for (const auto& point : secondLargestCluster) {
+        //     if (y_to_x_map.find(point.y) == y_to_x_map.end()) {
+        //         y_to_x_map[point.y] = point.x;
+        //         filtered_secondLargestCluster.push_back(point);
+        //     }
+        // }
+
         
+        // largestCluster = filtered_largestCluster;
+        // secondLargestCluster = filtered_secondLargestCluster;
         cv::Mat dbImage = cv::Mat::zeros(gray_image.rows, gray_image.cols,CV_8UC1);
         cv::Mat dbImage2 = cv::Mat::zeros(gray_image.rows, gray_image.cols,CV_8UC1);
 
@@ -231,11 +259,13 @@ private:
         }
 
         
-        dbMsg = cv_bridge::CvImage(std_msgs::msg::Header(),"mono8",dbImage2).toImageMsg();
+        dbMsg = cv_bridge::CvImage(std_msgs::msg::Header(),"mono8",dbImage).toImageMsg();
         db_publisher->publish(*dbMsg);
+
+        cv::imshow("window",dbImage);
+        cv::waitKey(1);
        
-    //    cv::imshow("window",dbImage2);
-    //    cv::waitKey(10);
+    
         // midpoint_publisher(largestCluster,secondLargestCluster,dbImage2);
     
 
@@ -558,4 +588,3 @@ int main(int argc, char * argv[]) {
     rclcpp::shutdown();
     return 0;
 }
-

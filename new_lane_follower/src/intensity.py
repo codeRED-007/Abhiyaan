@@ -8,13 +8,13 @@ import cv2
 class ImageSubscriber(Node):
     def __init__(self):
         super().__init__('pixel_coord')
-        self.subscription = self.create_subscription(Image, '/camera_forward/image_raw', self.image_callback, 10)
+        self.subscription = self.create_subscription(Image, '/ipm_image', self.image_callback, 10)
         self.subscription  # prevent unused variable warning
         self.bridge = CvBridge()
 
     def image_callback(self, msg):
         image = self.bridge.imgmsg_to_cv2(msg)
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        # image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         # print(image.shape)
         cv2.imshow('Image', image)
         cv2.setMouseCallback('Image', self.on_mouse, image)

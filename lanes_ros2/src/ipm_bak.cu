@@ -60,6 +60,7 @@ __global__ void dev_matmul(const T *a, const T *b, T *output, int rows){
 }
 
 
+
 void matmul(double *a, double *b, double *c){
 	//a is 3x3
 	//b is 3x1
@@ -155,7 +156,7 @@ class IPM : public rclcpp::Node
 	    this->declare_parameter("binary_threshold_high",240);
 	    this->declare_parameter("ipm_pitch",-24*M_PI/180);
 	    this->declare_parameter("ipm_height",1.41);
-	    this->declare_parameter("frame","base_link");
+	    this->declare_parameter("frame","map");
 
 
 	    //getting useful params
@@ -223,6 +224,14 @@ class IPM : public rclcpp::Node
 
 	nonZeroCoordinates = downsampled;
 
+	vector<pair<int,int>> points;
+
+	for (int i = 0; i < nonZeroCoordinates.rows; ++i) {
+        cv::Point point = nonZeroCoordinates.at<cv::Point>(i);
+		std::pair<int,int> p = process_point(point.y,point.x);
+        if (p.first != 0 and p.second!=0)
+			points.emplace_back(p);
+    }
 	
 	
 
@@ -231,103 +240,103 @@ class IPM : public rclcpp::Node
 		
 
 
-	//some calculation s
-	float roll = 0;
-	float pitch = 0;//-22* M_PI / 180;
-	float yaw = 0;
-	float h = 0.8; //1.373;
-	int m = 3;
-	int n = 3;
-	vector<double> k(9), nor(3), uv(3);
+	// //some calculation s
+	// float roll = 0;
+	// float pitch = 0;//-22* M_PI / 180;
+	// float yaw = 0;
+	// float h = 0.8; //1.373;
+	// int m = 3;
+	// int n = 3;
+	// vector<double> k(9), nor(3), uv(3);
 
-	double cy, cr, sy, sr, sp, cp;
-	cy = cos(yaw);
-	sy = sin(yaw);
-	cp = cos(pitch);
-	sp = sin(pitch);
-	cr = cos(roll);
-	sr = sin(roll);
-	k[0] = cr*cy+sp*sr+sy;
-	k[1] = cr*sp*sy-cy*sr;
-	k[2] = -cp*sy;
-	k[3] = cp*sr;
-	k[4] = cp*cr;
-	k[5] = sp;
-	k[6] = cr*sy-cy*sp*sr;
-	k[7] = -cr*cy*sp -sr*sy;
-	k[8] = cp*cy;
+	// double cy, cr, sy, sr, sp, cp;
+	// cy = cos(yaw);
+	// sy = sin(yaw);
+	// cp = cos(pitch);
+	// sp = sin(pitch);
+	// cr = cos(roll);
+	// sr = sin(roll);
+	// k[0] = cr*cy+sp*sr+sy;
+	// k[1] = cr*sp*sy-cy*sr;
+	// k[2] = -cp*sy;
+	// k[3] = cp*sr;
+	// k[4] = cp*cr;
+	// k[5] = sp;
+	// k[6] = cr*sy-cy*sp*sr;
+	// k[7] = -cr*cy*sp -sr*sy;
+	// k[8] = cp*cy;
 
-	nor[0] = 0;
-	nor[1] = 1.0;
-	nor[2] = 0;
+	// nor[0] = 0;
+	// nor[1] = 1.0;
+	// nor[2] = 0;
 
-	// //what does this do?
-	matmul(k.data(), nor.data(), uv.data());
+	// // //what does this do?
+	// matmul(k.data(), nor.data(), uv.data());
 
-	// no of points to map
-	cv::Size s = nonZeroCoordinates.size();
-	int rows = s.height;
-	// std::cout << "rows : " << rows << '\n';
-	auto caminfo = this->camera_info.k;
-	Eigen::Map<Matrix<double,3,3,RowMajor> > mat(caminfo.data());
-	mat = mat.inverse();
-	double *inv_caminfo = mat.data();
+	// // no of points to map
+	// cv::Size s = nonZeroCoordinates.size();
+	// int rows = s.height;
+	// // std::cout << "rows : " << rows << '\n';
+	// auto caminfo = this->camera_info.k;
+	// Eigen::Map<Matrix<double,3,3,RowMajor> > mat(caminfo.data());
+	// mat = mat.inverse();
+	// double *inv_caminfo = mat.data();
 
-	vector<double> kin_uv(3*rows), uv_hom(3*rows), denom(rows);
+	// vector<double> kin_uv(3*rows), uv_hom(3*rows), denom(rows);
 
 
-	//device
-	double *d_uv_hom, *d_kin_uv, *d_caminfo, *d_denom, *d_uv;
-	auto result = cudaMalloc((void **) &d_uv_hom, sizeof(double)*3*rows);
-	if(result != cudaSuccess){
-		cerr << "uv home failed!\n";
-	}
-	result = cudaMalloc((void **) &d_kin_uv, sizeof(double)*3*rows);
-		if(result != cudaSuccess){
-		cerr << "kin uv  failed!\n";
-	}
-	result = cudaMalloc((void **) &d_caminfo, sizeof(double)*9);
-		if(result != cudaSuccess){
-		cerr << "cam info failed!\n";
-	}
+	// //device
+	// double *d_uv_hom, *d_kin_uv, *d_caminfo, *d_denom, *d_uv;
+	// auto result = cudaMalloc((void **) &d_uv_hom, sizeof(double)*3*rows);
+	// if(result != cudaSuccess){
+	// 	cerr << "uv home failed!\n";
+	// }
+	// result = cudaMalloc((void **) &d_kin_uv, sizeof(double)*3*rows);
+	// 	if(result != cudaSuccess){
+	// 	cerr << "kin uv  failed!\n";
+	// }
+	// result = cudaMalloc((void **) &d_caminfo, sizeof(double)*9);
+	// 	if(result != cudaSuccess){
+	// 	cerr << "cam info failed!\n";
+	// }
 
-	result = cudaMalloc((void **) &d_denom, sizeof(double)*rows);
-		if(result != cudaSuccess){
-		cerr << "denom failed!\n";
-	}
-	result = cudaMalloc((void **) &d_uv, sizeof(double)*3);
-		if(result != cudaSuccess){
-		cerr << "uv  failed!\n";
-	}
+	// result = cudaMalloc((void **) &d_denom, sizeof(double)*rows);
+	// 	if(result != cudaSuccess){
+	// 	cerr << "denom failed!\n";
+	// }
+	// result = cudaMalloc((void **) &d_uv, sizeof(double)*3);
+	// 	if(result != cudaSuccess){
+	// 	cerr << "uv  failed!\n";
+	// }
  
-	//gathering data for all points
-	if(rows == 0){
-		//if no points found, will publish the previous non zero pointcloud
-		std::cerr << "no points to project!!!";
-		publisher_->publish(pub_pointcloud);
-	}else{
-	for (int i = 0; i < rows; i++)
-	 {
-	     int x = nonZeroCoordinates.at<cv::Point>(i).x;
-	     int y = nonZeroCoordinates.at<cv::Point>(i).y;
-	     uv_hom[i*3] = x;
-	     uv_hom[i*3+1] = y; 
-	     uv_hom[i*3+2] = 1;
-	 }
+	// //gathering data for all points
+	// if(rows == 0){
+	// 	//if no points found, will publish the previous non zero pointcloud
+	// 	std::cerr << "no points to project!!!";
+	// 	publisher_->publish(pub_pointcloud);
+	// }else{
+	// for (int i = 0; i < rows; i++)
+	//  {
+	//      int x = nonZeroCoordinates.at<cv::Point>(i).x;
+	//      int y = nonZeroCoordinates.at<cv::Point>(i).y;
+	//      uv_hom[i*3] = x;
+	//      uv_hom[i*3+1] = y; 
+	//      uv_hom[i*3+2] = 1;
+	//  }
 
 	 
-	//copying to device
-	cudaMemcpy(d_caminfo, inv_caminfo, sizeof(double)*9, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_uv_hom, uv_hom.data(), sizeof(double)*3*rows, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_uv, uv.data(), sizeof(double)*3, cudaMemcpyHostToDevice);
+	// //copying to device
+	// cudaMemcpy(d_caminfo, inv_caminfo, sizeof(double)*9, cudaMemcpyHostToDevice);
+	// cudaMemcpy(d_uv_hom, uv_hom.data(), sizeof(double)*3*rows, cudaMemcpyHostToDevice);
+	// cudaMemcpy(d_uv, uv.data(), sizeof(double)*3, cudaMemcpyHostToDevice);
 	
-	//batch multiplication
-	//launching rows no of threads and one block
-	dev_matmul<<<BLOCKS, (rows+BLOCKS-1)/BLOCKS>>>(d_caminfo, d_uv_hom, d_kin_uv, rows);
-	dot<<<BLOCKS, (rows+BLOCKS-1)/BLOCKS>>>(d_uv, d_kin_uv, d_denom, rows);
+	// //batch multiplication
+	// //launching rows no of threads and one block
+	// dev_matmul<<<BLOCKS, (rows+BLOCKS-1)/BLOCKS>>>(d_caminfo, d_uv_hom, d_kin_uv, rows);
+	// dot<<<BLOCKS, (rows+BLOCKS-1)/BLOCKS>>>(d_uv, d_kin_uv, d_denom, rows);
 	
-	cudaMemcpy(kin_uv.data(), d_kin_uv, sizeof(double)*3*rows, cudaMemcpyDeviceToHost);
-	cudaMemcpy(denom.data(), d_denom, sizeof(double)*rows, cudaMemcpyDeviceToHost);
+	// cudaMemcpy(kin_uv.data(), d_kin_uv, sizeof(double)*3*rows, cudaMemcpyDeviceToHost);
+	// cudaMemcpy(denom.data(), d_denom, sizeof(double)*rows, cudaMemcpyDeviceToHost);
 
 	// Lane Following -----------------------------------------------------------------------------------------------------
 	cv::Mat ipm_image = cv::Mat::zeros(gray_image.size(), gray_image.type());
@@ -335,14 +344,13 @@ class IPM : public rclcpp::Node
 	std::vector<cv::Point> filtered_white_pixel_indices;
 	
 	// cout<<denom[0]<<endl;;
-	for(int i=0; i < rows; ++i) {
+	for(int i=0; i < points.size(); ++i) {
 		pcl::PointXYZ vec;
 		//fix, make it work im not doing it
-		if (std::isnan(denom[i]) or denom[i]==0) continue;
-		cout<<denom[i]<<endl;
+		
 
-		vec.x = h * kin_uv[i*3+2] / denom[i];
-		vec.y = -h * kin_uv[i*3] / denom[i];
+		vec.x = points[i].first;
+		vec.y = - points[i].second;
 		vec.z =  0 ;//h * kin_uv[i*3+1]/denom[i];
 		// cout<<vec.x<<vec.y<<vec.z<<endl;
 		cloud_msg->points.push_back(vec);
@@ -372,12 +380,12 @@ class IPM : public rclcpp::Node
 	
 	
 	//---------------------------------------------------------------------------------------------------------------------------------
-	cudaFree(d_uv_hom);
+	// cudaFree(d_uv_hom);
 	
-	cudaFree(d_uv);
-	cudaFree(d_kin_uv);
-	cudaFree(d_caminfo);
-	cudaFree(d_denom);   
+	// cudaFree(d_uv);
+	// cudaFree(d_kin_uv);
+	// cudaFree(d_caminfo);
+	// cudaFree(d_denom);   
 	cloud_msg->height   = 1;
 	cloud_msg->width    = cloud_msg->points.size();
 	cloud_msg->is_dense = false;
@@ -428,7 +436,74 @@ class IPM : public rclcpp::Node
 	cloud_msg->points.clear();
 	 
 	}
+
+	std::pair<int,int> process_point(int y, int x) {
+    sensor_msgs::msg::PointCloud2 pub_pointcloud;
+    auto cloud_msg = std::make_unique<pcl::PointCloud<pcl::PointXYZ>>();
+
+    // Camera extrinsic parameters
+    float roll = 0;
+    float pitch = 0;
+    float yaw = 0;
+    float h = 0.8;
+
+    // Pre-compute sin and cos values
+    double cy = cos(yaw);
+    double sy = sin(yaw);
+    double cp = cos(pitch);
+    double sp = sin(pitch);
+    double cr = cos(roll);
+    double sr = sin(roll);
+
+    // Rotation matrix K (combining yaw, pitch, and roll)
+    Eigen::Matrix3d K;
+    K << cy * cp, cy * sp * sr - sy * cr, cy * sp * cr + sy * sr,
+         sy * cp, sy * sp * sr + cy * cr, sy * sp * cr - cy * sr,
+         -sp,     cp * sr,                cp * cr;
+
+    // Normal vector to the ground plane (assuming flat ground)
+    Eigen::Vector3d nor(0.0, 1.0, 0.0);
+
+    // Calculate nc, the rotated normal vector
+    Eigen::Vector3d nc = K * nor;
+
+    // Inverse camera intrinsic matrix
+    auto caminfo = this->camera_info.k; // assuming row-major order
+    Eigen::Map<Matrix<double,3,3,RowMajor>> kin(caminfo.data());
+    kin = kin.inverse().eval();
+
+    // Convert the pixel coordinates (x, y) to homogeneous coordinates
+    Eigen::Vector3d uv_hom(x, y, 1);
+
+    // Map pixel coordinates to 3D camera ray
+    Eigen::Vector3d kin_uv = kin * uv_hom;
+
+    // Calculate the denominator for scaling (distance along the ray to the plane)
+    double denom = kin_uv.dot(nc);
+
+    // Ensure denom is not zero to avoid division by zero
+    if (denom != 0) {
+        // Scale the ray by the height of the plane h
+        pcl::PointXYZ point;
+        point.x = h * kin_uv[2] / denom;
+        point.y = -h * kin_uv[0] / denom;
+        point.z = 0; // z-coordinate is zero on the ground plane
+		std::pair<int,int> p;
+		p.first = point.x;
+		p.second = point.y;
+		return p;
+        
+    } else {
+        std::cerr << "Denominator is zero, invalid projection for point (" << x << ", " << y << ")" << std::endl;
+		std::pair<int,int> p;
+		p.first = 0;
+		p.second = 0;
+		return p;
     }
+	
+    
+}
+    
 
 
 	

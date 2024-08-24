@@ -1,0 +1,63 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/zed_components/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/zed_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/ti_mmwave_rospkg/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/ti_mmwave_rospkg_msgs/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/serial/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/rplidar_ros/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_visual_slam/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_visual_slam_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_unet/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_tensor_list_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_pointcloud_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_nova_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_nitros_bridge_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_ess/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_common/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_bi3d_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/isaac_ros_apriltag_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/install/custom_msgs/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/industrial_reconstruction_msgs/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/image_geometry/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/gazebo_plugins/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/gazebo_ros/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/gazebo_msgs/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/zed_components/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/zed_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/negotiated_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_visual_slam_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_tensor_list_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_pointcloud_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_nova_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_nitros_bridge_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_common/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_bi3d_interfaces/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/install/isaac_ros_apriltag_interfaces/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/isaac_ros_common/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/isaac_ros_dnn_stereo_depth/isaac_ros_ess/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/isaac_ros_image_segmentation/isaac_ros_unet/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/isaac_ros_visual_slam/isaac_ros_visual_slam/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/mmwave_ti_ros2/serial-ros2-master/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/mmwave_ti_ros2/ti_mmwave_rospkg/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/rplidar_ros/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/vnav/include/**",
+        "/home/abhiyaan-orin/isaac_ros-dev/src/isaac_ros_common/src/vsim/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-arm64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

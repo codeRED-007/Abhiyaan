@@ -19,7 +19,7 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(custom_msgs)
+# find_package(custom_msgs)
 find_package(pcl_conversions REQUIRED)
 find_package(pcl_ros REQUIRED)
 find_package(CUDA REQUIRED)
@@ -84,6 +84,7 @@ install(
   DIRECTORY 
     launch
     scripts
+    src
   DESTINATION share/${PROJECT_NAME}
 )
 

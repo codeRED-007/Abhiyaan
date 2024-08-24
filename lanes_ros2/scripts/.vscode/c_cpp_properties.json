@@ -1,0 +1,41 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/abhiyaan-orin/igvc_ws/install/zed_components/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/zed_interfaces/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/ti_mmwave_rospkg/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/ti_mmwave_rospkg_msgs/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/serial/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/septentrio_gnss_driver/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/sbg_driver/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/pointcloud_to_laserscan/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/depthimage_to_laserscan/include/**",
+        "/home/abhiyaan-orin/igvc_ws/install/custom_msgs/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/depthimage_to_laserscan/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/depthimage_to_pointcloud2/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/mmwave_ti_ros2/serial-ros2-master/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/mmwave_ti_ros2/ti_mmwave_rospkg/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/pointcloud_to_laserscan/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/potholes/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/rplidar_ros/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/sbg_ros2_driver/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/septentrio_gnss_driver/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/vnav/include/**",
+        "/home/abhiyaan-orin/igvc_ws/src/vsim/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-arm64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

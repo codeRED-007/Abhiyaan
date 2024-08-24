@@ -36,6 +36,7 @@ find_package(OpenMP REQUIRED)
 find_package(mlpack REQUIRED)
 find_package(Boost REQUIRED)
 
+
 include_directories(
   include
   ${OpenCV_INCLUDE_DIRS}
@@ -64,6 +65,11 @@ target_link_libraries(lane_follower
 )
 ament_target_dependencies(lane_follower rclcpp sensor_msgs cv_bridge OpenCV Armadillo OpenMP mlpack Boost std_msgs sensor_msgs pcl_ros pcl_conversions)
 
+add_executable(one_lane_follower src/one_lane_follower.cpp)
+target_link_libraries(one_lane_follower
+  ${OpenCV_LIBRARIES}
+)
+ament_target_dependencies(one_lane_follower rclcpp sensor_msgs cv_bridge OpenCV)
 # add_executable(lane_follower_2 src/lane_follower_2.cpp)
 # target_link_libraries(lane_follower_2
 #   ${OpenCV_LIBRARIES}
@@ -94,6 +100,7 @@ ament_target_dependencies(ipm
    PROGRAMS 
      src/intensity.py
      src/go.py
+     src/go_new.py
      src/robot_navigator.py
      src/hsv.py
      src/hsv_thresholding.py
@@ -102,6 +109,7 @@ ament_target_dependencies(ipm
 )
 
 install(TARGETS
+  one_lane_follower
   lane_follower
   ipm
   

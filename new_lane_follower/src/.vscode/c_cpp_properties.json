@@ -1,0 +1,46 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/abhiyaan-orin/ros2_ws/install/zed_components/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/zed_interfaces/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/spatio_temporal_voxel_layer/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/septentrio_gnss_driver/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/sbg_driver/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/pointcloud_to_laserscan/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/micro_ros_agent/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/micro_ros_msgs/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/laser_filters/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/gazebo_plugins/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/gazebo_msgs/include/**",
+        "/home/abhiyaan-orin/ros2_ws/install/custom_msgs/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/dynamix/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/laser_filters/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/micro_ros_agent/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/navigation/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/new_lane_follower/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/object_detection/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/pointcloud_to_laserscan/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/potholes/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/rf2o_laser_odometry/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/sbg_ros2_driver/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/septentrio_gnss_driver/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/spatio_temporal_voxel_layer/spatio_temporal_voxel_layer/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/vnav/include/**",
+        "/home/abhiyaan-orin/ros2_ws/src/vsim/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-arm64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

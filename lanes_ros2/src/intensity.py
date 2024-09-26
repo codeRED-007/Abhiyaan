@@ -5,7 +5,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
-from std_msgs.msg import Float32MultiArray
+from std_msgs.msg import Float64
 import struct
 from std_msgs.msg import Header
 from sensor_msgs.msg import PointCloud2, PointField
@@ -15,11 +15,12 @@ from sensor_msgs.msg import PointCloud2, PointField
 class ImageSubscriber(Node):
     def __init__(self):
         super().__init__('pixel_coord')
-        self.subscription = self.create_subscription(Image, '/ipm_image', self.image_callback, 10)
+        self.subscription = self.create_subscription(Image, '/ipm_image_l', self.image_callback, 10)
+        self.subscription = self.create_subscription(Float64,'/lane_width',self.width_callback,10)
         self.publisher = self.create_publisher(PointCloud2,'/goal_points',10)
         self.publisher_vec = self.create_publisher(PointCloud2,'/goal_vec',10)
         self.bridge = CvBridge()
-
+        self.width_received = False
 
     # def publish_as_vector(self, offset_points):
     #     vector_msg = Float32MultiArray()
@@ -30,8 +31,14 @@ class ImageSubscriber(Node):
         
     #     self.publisher_vec.publish(vector_msg)
 
-
+    def width_callback(self,msg): 
+        self.width = msg.data
+        self.width_received = True
+    
     def image_callback(self, msg):
+        if not self.width_received: return 
+        else: self.width_received = False
+
         image = self.bridge.imgmsg_to_cv2(msg)
         # image = cv2.flip(image,1)
         kernel_size = (7, 7)  # Size of the kernel, (width, height)
@@ -43,6 +50,11 @@ class ImageSubscriber(Node):
         image = cv2.Canny(image, 0, 255, apertureSize=5)
 
         edge_points = np.column_stack(np.where(image > 0))
+        if edge_points.size == 0:
+            print("No edge points found.")
+            return
+
+        
         sorted_edge_points = edge_points[np.argsort(edge_points[:, 0])]
 
         # Get the image width
@@ -87,13 +99,15 @@ class ImageSubscriber(Node):
             # Offset the sampled points perpendicularly
 
             print(sampled_points)
-            if sampled_points[-1][0] < image_width/2:
-                offset = 150 # Offset distance
-            else:
-                offset = -150
-            offset_points = []
+            
 
-            for i in range(len(sampled_points_smooth) - 1):
+            if sampled_points[-1][0] < image_width/2:
+                offset = self.width*100/2 # Offset distance
+            else:
+                offset = -self.width*100/2
+            offset_points = []
+            print (offset)
+            for i in range(0,len(sampled_points_smooth) - 1,8):
                 x1, y1 = sampled_points_smooth[i]
                 x2, y2 = sampled_points_smooth[i + 1]
 
@@ -123,19 +137,21 @@ class ImageSubscriber(Node):
             for i in range(len(sampled_points) - 1):
                 x1, y1 = sampled_points[i]
                 x2, y2 = sampled_points[i + 1]
-                cv2.line(image, (x1, y1), (x2, y2), (255, 255, 255), 2)
-
-        for i in offset_points:
-            # Convert the coordinates to integers
-            x = int(i[0])
-            y = int(i[1])
+                cv2.line(image, (x1, y1), (x2, y2), (255, 255, 255), 3)
+        try:
+            for i in offset_points:
+                # Convert the coordinates to integers
+                x = int(i[0])
+                y = int(i[1])
+                
+                # Check if the point is within the image boundaries
+                if 0 <= x < image.shape[1] and 0 <= y < image.shape[0]:
+                    image[y, x] = 255  # For grayscale images (single channel)
+                    # For RGB images, use: image[y, x] = (255, 255, 255)  # White color
             
-            # Check if the point is within the image boundaries
-            if 0 <= x < image.shape[1] and 0 <= y < image.shape[0]:
-                image[y, x] = 255  # For grayscale images (single channel)
-                # For RGB images, use: image[y, x] = (255, 255, 255)  # White color
-        
-        self.transform_to_pointcloud(offset_points,image)
+            self.transform_to_pointcloud(offset_points,image)
+        except:
+            print("Lane not visible")
         
 
     def transform_to_pointcloud(self,offset_points,image):

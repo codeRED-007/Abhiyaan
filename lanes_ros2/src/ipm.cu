@@ -149,7 +149,7 @@ class IPM : public rclcpp::Node
     : Node("ipm"), tf_buffer_(this->get_clock()), tf_listener_(tf_buffer_)
     {
 	   //default values
-	    this->declare_parameter("masked_image_topic","/dbImage");
+	    this->declare_parameter("masked_image_topic","/dbImage2");
 	    this->declare_parameter("camera_topic","/camera_forward/camera_info");
 	    this->declare_parameter("binary_threshold_low",100);
 	    this->declare_parameter("binary_threshold_high",240);
@@ -169,13 +169,18 @@ class IPM : public rclcpp::Node
 	    frame = this->get_parameter("frame").as_string();
 	//    cout<<masked_image_topic<<" "<<camera_topic<<endl;;
        subscription_caminfo = this->create_subscription<sensor_msgs::msg::CameraInfo>(camera_topic, 10, std::bind(&IPM::call, this, _1));
-       subscription_img = this->create_subscription<sensor_msgs::msg::Image>(masked_image_topic, 10, std::bind(&IPM::process_img, this, _1));
-       publisher_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/igvc/ipm", 10);
-       publisher_map = this->create_publisher<sensor_msgs::msg::PointCloud2>("/lanes", 10);
+       subscription_img_largest = this->create_subscription<sensor_msgs::msg::Image>("/dbImage", 10, std::bind(&IPM::process_img1, this, _1));
+       subscription_img_small = this->create_subscription<sensor_msgs::msg::Image>("/dbImage2", 10, std::bind(&IPM::process_img2, this, _1));
 
-	   publisher_forward = this->create_publisher<sensor_msgs::msg::Image>("/igvc/lanes_binary/forward", 10);
-	   publisher_image = this->create_publisher<sensor_msgs::msg::Image>("/ipm_image", 10);
+       publisher_largest = this->create_publisher<sensor_msgs::msg::PointCloud2>("/ipm_base_1", 10);
+       publisher_largest_map = this->create_publisher<sensor_msgs::msg::PointCloud2>("/ipm_map_1", 10);
+       publisher_small = this->create_publisher<sensor_msgs::msg::PointCloud2>("/ipm_base_2", 10);
+       publisher_small_map = this->create_publisher<sensor_msgs::msg::PointCloud2>("/ipm_map_2", 10);
+
+	//    publisher_forward = this->create_publisher<sensor_msgs::msg::Image>("/igvc/lanes_binary/forward", 10);
+	   publisher_image_l = this->create_publisher<sensor_msgs::msg::Image>("/ipm_image_l", 10);
 	   
+	   publisher_image_s = this->create_publisher<sensor_msgs::msg::Image>("/ipm_image_s", 10);
 
 
 	//    parameter_callback_handle_ = this->add_on_set_parameters_callback(std::bind(&IPM::parameter_callback, this, std::placeholders::_1));
@@ -187,11 +192,10 @@ class IPM : public rclcpp::Node
     {
         this->camera_info = *msg;
     }
-    void process_img(const sensor_msgs::msg::Image::SharedPtr msg)
+    void process_img1(const sensor_msgs::msg::Image::SharedPtr msg)
     {
 	//processing recieved image
 
-	unique_ptr<PointCloud> cloud_msg  = std::make_unique<PointCloud>();
 	cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
 	if (cv_ptr == nullptr) {
 		RCLCPP_ERROR(this->get_logger(), "Failed to convert the image");
@@ -207,8 +211,8 @@ class IPM : public rclcpp::Node
 	// // cout<<binary_threshold_low<<" "<<binary_threshold_high<<endl;
 	// cv::inRange(gray_image, cv::Scalar(binary_threshold_low), cv::Scalar(binary_threshold_high), gray_image); 
 	
-	sensor_msgs::msg::Image::SharedPtr gray_msg_ros = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", gray_image).toImageMsg();
-	publisher_forward->publish(*gray_msg_ros);
+	// sensor_msgs::msg::Image::SharedPtr gray_msg_ros = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", gray_image).toImageMsg();
+	// publisher_forward->publish(*gray_msg_ros);
 	// cv::imshow("window",gray_image);
 	// cv::waitKey(1);
 
@@ -224,14 +228,46 @@ class IPM : public rclcpp::Node
 	nonZeroCoordinates = downsampled;
 
 	
+	ipm(nonZeroCoordinates,'l');
+
+	
+	 
+	}
+	void process_img2(const sensor_msgs::msg::Image::SharedPtr msg)
+    {
+	//processing recieved image
+
+	cv_bridge::CvImagePtr cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO8);
+	if (cv_ptr == nullptr) {
+		RCLCPP_ERROR(this->get_logger(), "Failed to convert the image");
+		return;
+	}
+	gray_image = cv_ptr->image;
+
+	cv::Mat nonZeroCoordinates;
+	cv::findNonZero(gray_image, nonZeroCoordinates);
+
+	
+	
+	cv::Mat downsampled;
+
+	downsample(nonZeroCoordinates,downsampled);
+
+	nonZeroCoordinates = downsampled;
+
+	
+	ipm(nonZeroCoordinates,'s');
+	
+	 
+	}
+
+
+ 	void ipm(cv::Mat nonZeroCoordinates,char t) {
+
+	unique_ptr<PointCloud> cloud_msg  = std::make_unique<PointCloud>();
 	
 
-	// Now `downsampled` contains the grid-based downsampled points
-
-		
-
-
-	//some calculation s
+		//some calculation s
 	float roll = 0;
 	float pitch = 0;//-22* M_PI / 180;
 	float yaw = 0;
@@ -304,7 +340,8 @@ class IPM : public rclcpp::Node
 	if(rows == 0){
 		//if no points found, will publish the previous non zero pointcloud
 		std::cerr << "no points to project!!!";
-		publisher_->publish(pub_pointcloud);
+		if (t=='l') publisher_largest->publish(pub_pointcloud);
+		else publisher_small->publish(pub_pointcloud);
 	}else{
 	for (int i = 0; i < rows; i++)
 	 {
@@ -347,7 +384,7 @@ class IPM : public rclcpp::Node
 		// cout<<vec.x<<vec.y<<vec.z<<endl;
 		cloud_msg->points.push_back(vec);
 		vec.y *= 100;
-		vec.x*= 100;
+		vec.x *= 100;
 		vec.y += ipm_image.cols/2;
 		vec.x = ipm_image.rows - vec.x;
 		vec.y = ipm_image.cols - vec.y;
@@ -366,8 +403,14 @@ class IPM : public rclcpp::Node
 		
 	}
 	
-	cv::imshow("window",ipm_image);
-	cv::waitKey(1);
+	// cv::imshow("window",ipm_image);
+	// cv::waitKey(1);
+
+	sensor_msgs::msg::Image::SharedPtr ipm_msg_ros = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", ipm_image).toImageMsg();
+	if (t=='l') publisher_image_l->publish(*ipm_msg_ros);
+	else publisher_image_s->publish(*ipm_msg_ros);
+
+	
 	
 	
 	
@@ -385,13 +428,9 @@ class IPM : public rclcpp::Node
 	pub_pointcloud.header.frame_id =frame;
 	pub_pointcloud.header.stamp = rclcpp::Clock().now();
 
-
-	sensor_msgs::msg::Image::SharedPtr ipm_msg_ros = cv_bridge::CvImage(std_msgs::msg::Header(), "mono8", ipm_image).toImageMsg();
-
-	publisher_image->publish(*ipm_msg_ros);
-
-	 // Publishing our cloud image
-	publisher_->publish(pub_pointcloud);
+	
+	if (t=='l') publisher_largest->publish(pub_pointcloud);
+	else publisher_small->publish(pub_pointcloud);
 
 	try {
         // Lookup the transform from base_link to map
@@ -423,46 +462,29 @@ class IPM : public rclcpp::Node
 	pub_pointcloud.header.frame_id ="map";
 	pub_pointcloud.header.stamp = rclcpp::Clock().now();
     // cloud_msg->header.frame_id = "map"; // Set the frame_id to map after transformation
-    publisher_map->publish(pub_pointcloud);
-
+    if (t=='l') publisher_largest_map->publish(pub_pointcloud);
+	else publisher_small_map->publish(pub_pointcloud);
 	cloud_msg->points.clear();
-	 
+
 	}
     }
 
 
-	
 
-	// rcl_interfaces::msg::SetParametersResult parameter_callback(
-    // const std::vector<rclcpp::Parameter> & params)
-	// {
-	// 	rcl_interfaces::msg::SetParametersResult result;
-	// 	result.successful = true;
-		
-	// 	for (const auto & param : params) {
-	// 	if (param.get_name() == "masked_image_topic" && param.get_type() == rclcpp::ParameterType::PARAMETER_STRING) {
-	// 		masked_image_topic = param.as_string();
-			
-	// 		// Destroy the old subscription
-	// 		subscription_img.reset();
-			
-	// 		// Create a new subscription with the updated topic
-	// 		subscription_img = this->create_subscription<sensor_msgs::msg::Image>(masked_image_topic, 10, std::bind(&IPM::process_img, this, _1));
-			
-	// 		// rclcpp::RCLCPP_INFO(this->get_logger(), "Changed subscription topic to: %s", subscription_topic_.c_str());
-	// 	}
-	// 	}
-		
-	// 	return result;
-	// }
     private:
 		rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr subscription_caminfo;
-		rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_img;
-		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_;
-		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_map;
+		rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_img_largest;
+		rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr subscription_img_small;
 
-		rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_forward;
-		rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_image;
+		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_largest;
+		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_largest_map;
+		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_small;
+		rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr publisher_small_map;
+
+		// rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_forward;
+		rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_image_l;
+		rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_image_s;
+
 		cv::Mat gray_image;
 		sensor_msgs::msg::CameraInfo camera_info;
 		typedef pcl::PointCloud<pcl::PointXYZ> PointCloud;
